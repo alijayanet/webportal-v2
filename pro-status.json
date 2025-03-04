@@ -1,5 +1,5 @@
 {
   "isPro": false,
   "activatedAt": null,
-  "note": "File aktivasi untuk WebPortal PRO"
+  "note": "File aktivasi untuk WebPortal PRO. Salin file ini ke direktori aplikasi dan masukkan token untuk mengaktifkan fitur PRO."
 }
