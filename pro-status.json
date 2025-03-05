@@ -1,6 +1,6 @@
 {
   "isPro": true,
   "activatedAt": "2025-03-05T02:58:30.104Z",
-  "version": "3.0", // Ubah dari 2.0 menjadi 3.0
+  "version": "2.0",
   "note": "File aktivasi untuk WebPortal PRO. Salin file ini ke direktori aplikasi dan masukkan token untuk mengaktifkan fitur PRO."
 }
