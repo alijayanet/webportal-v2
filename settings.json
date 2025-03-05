@@ -1,0 +1,13 @@
+{
+  "otpEnabled": false,
+  "otpLength": 6,
+  "otpExpiry": 300,
+  "whatsappGateway": "fonnte",
+  "otpTemplate": "Kode OTP Anda untuk login WebPortal: {{otp}}. Kode ini berlaku selama 5 menit.",
+  "adminUsername": "admin",
+  "adminPassword": "admin123",
+  "port": 4600,
+  "proEnabled": false,
+  "otpMessage": "Kode OTP Anda untuk login WebPortal: {{otp}}. Kode ini berlaku selama {{expiry}} menit.",
+  "adminWhatsapp": ""
+}
