@@ -3,11 +3,11 @@
   "otpExpiry": 300,
   "otpLength": 4,
   "whatsappGateway": "fonnte",
-  "adminWhatsapp": "6281947215703",
+  "adminWhatsapp": "",
   "gateways": {
     "fonnte": {
-      "token": "wik2cbw4NaURsKqycqL6",
-      "enabled": true
+      "token": "",
+      "enabled": false
     },
     "wablas": {
       "token": "",
