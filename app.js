@@ -234,34 +234,100 @@ async function sendViaMpwa(phoneNumber, message) {
     try {
         const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE));
         const token = settings.gateways.mpwa.token;
-        const serverUrl = settings.gateways.mpwa.serverUrl;
         const sender = settings.gateways.mpwa.sender || 'default';
         
-        if (!token || !serverUrl) {
-            console.error('MPWA token atau server URL tidak dikonfigurasi');
+        if (!token) {
+            console.error('MPWA token tidak dikonfigurasi');
             return false;
         }
         
-        // Berdasarkan dokumentasi PHP yang diberikan
-        const response = await fetch(`${serverUrl}/send-message`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                'api_key': token,
-                'sender': sender,
-                'number': phoneNumber,
-                'message': message
-            })
+        console.log('Mengirim MPWA ke:', {
+            nomor: phoneNumber,
+            sender: sender
         });
+
+        // Format nomor dengan benar (format 62xxx)
+        let targetNumber = phoneNumber;
+        if (!targetNumber.startsWith('62')) {
+            if (targetNumber.startsWith('0')) {
+                targetNumber = '62' + targetNumber.substring(1);
+            } else {
+                targetNumber = '62' + targetNumber;
+            }
+        }
         
-        const data = await response.json();
-        console.log('MPWA response:', data);
+        console.log('Format nomor MPWA:', targetNumber);
         
-        return data.status === 'success' || data.status === 'true' || data.status === true;
+        try {
+            // URL endpoint yang tetap
+            const endpoint = 'https://wa.parabolaku.id/send-message';
+            
+            // Gunakan format JSON sesuai contoh yang diberikan
+            const requestBody = {
+                api_key: token,
+                sender: sender,
+                number: targetNumber,
+                message: message,
+                footer: "ALIJAYA-NET"
+            };
+            
+            console.log('MPWA JSON data:', JSON.stringify(requestBody));
+            console.log('MPWA endpoint:', endpoint);
+            
+            // Kirim request dengan format JSON
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+            
+            console.log('MPWA response status:', response.status, response.statusText);
+            
+            // Ambil response text
+            const responseText = await response.text();
+            console.log('MPWA raw response:', responseText);
+            
+            // Coba parse JSON jika memungkinkan
+            try {
+                const jsonResponse = JSON.parse(responseText);
+                console.log('MPWA JSON response:', jsonResponse);
+                
+                // Cek status dari respons
+                if (jsonResponse && typeof jsonResponse === 'object') {
+                    // Format respons bisa bervariasi
+                    if (jsonResponse.status === true || 
+                        jsonResponse.status === 'true' || 
+                        jsonResponse.status === 'success' || 
+                        jsonResponse.success === true) {
+                        console.log('MPWA success response detected');
+                        return true;
+                    }
+                    
+                    console.log('MPWA failure detected in response:', jsonResponse);
+                    return false;
+                }
+            } catch (jsonError) {
+                console.error('MPWA JSON parse error:', jsonError);
+                
+                // Fallback: cek text response
+                if (responseText.toLowerCase().includes('success') || 
+                    responseText.toLowerCase().includes('berhasil')) {
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            return false;
+        } catch (error) {
+            console.error('MPWA request error:', error);
+            return false;
+        }
     } catch (error) {
-        console.error('Error sending via MPWA:', error);
+        console.error('MPWA general error:', error);
         return false;
     }
 }

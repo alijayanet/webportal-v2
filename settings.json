@@ -7,7 +7,7 @@
   "gateways": {
     "fonnte": {
       "token": "",
-      "enabled": false
+      "enabled": true
     },
     "wablas": {
       "token": "",
@@ -16,7 +16,7 @@
     },
     "mpwa": {
       "token": "",
-      "serverUrl": "https://mpwa.id/api",
+      "serverUrl": "",
       "sender": "",
       "enabled": false
     }
