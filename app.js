@@ -1786,6 +1786,109 @@ app.post('/admin/test-gateway', async (req, res) => {
     }
 });
 
+// Endpoint untuk get server settings (GenieACS dan admin credentials)
+app.get('/admin/get-server-settings', async (req, res) => {
+    if (!req.session.isAdmin) {
+        return res.status(403).json({ success: false, message: 'Tidak diizinkan' });
+    }
+
+    try {
+        // Baca file .env
+        const envContent = fs.readFileSync('.env', 'utf8');
+        
+        // Parse .env file untuk mendapatkan nilai yang dibutuhkan
+        const settings = {};
+        const envLines = envContent.split('\n');
+        
+        for (const line of envLines) {
+            // Skip komentar dan line kosong
+            if (line.trim().startsWith('#') || line.trim() === '') {
+                continue;
+            }
+            
+            const [key, value] = line.split('=');
+            if (key && value) {
+                settings[key.trim()] = value.trim();
+            }
+        }
+        
+        res.json({ 
+            success: true, 
+            settings: {
+                GENIEACS_URL: settings.GENIEACS_URL || '',
+                GENIEACS_USERNAME: settings.GENIEACS_USERNAME || '',
+                GENIEACS_PASSWORD: settings.GENIEACS_PASSWORD || '',
+                ADMIN_USERNAME: settings.ADMIN_USERNAME || '',
+                ADMIN_PASSWORD: settings.ADMIN_PASSWORD || ''
+            }
+        });
+    } catch (error) {
+        console.error('Error reading server settings:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Gagal membaca pengaturan server: ' + error.message 
+        });
+    }
+});
+
+// Endpoint untuk save server settings (GenieACS dan admin credentials)
+app.post('/admin/save-server-settings', async (req, res) => {
+    if (!req.session.isAdmin) {
+        return res.status(403).json({ success: false, message: 'Tidak diizinkan' });
+    }
+
+    try {
+        const { genieacsUrl, genieacsUsername, genieacsPassword, adminUsername, adminPassword } = req.body;
+        
+        // Validasi
+        if (!genieacsUrl || !genieacsUsername || !genieacsPassword || !adminUsername || !adminPassword) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Semua field harus diisi' 
+            });
+        }
+        
+        // Baca file .env yang ada
+        let envContent = fs.readFileSync('.env', 'utf8');
+        
+        // Update nilai untuk variabel yang ada
+        const updateEnvVariable = (variable, value) => {
+            const regex = new RegExp(`${variable}=.*`, 'g');
+            if (envContent.match(regex)) {
+                envContent = envContent.replace(regex, `${variable}=${value}`);
+            } else {
+                // Jika variabel tidak ditemukan, tambahkan di akhir file
+                envContent += `\n${variable}=${value}`;
+            }
+        };
+        
+        // Update semua variabel
+        updateEnvVariable('GENIEACS_URL', genieacsUrl);
+        updateEnvVariable('GENIEACS_USERNAME', genieacsUsername);
+        updateEnvVariable('GENIEACS_PASSWORD', genieacsPassword);
+        updateEnvVariable('ADMIN_USERNAME', adminUsername);
+        updateEnvVariable('ADMIN_PASSWORD', adminPassword);
+        
+        // Simpan kembali file .env
+        fs.writeFileSync('.env', envContent);
+        
+        // Update nilai di process.env
+        process.env.GENIEACS_URL = genieacsUrl;
+        process.env.GENIEACS_USERNAME = genieacsUsername;
+        process.env.GENIEACS_PASSWORD = genieacsPassword;
+        process.env.ADMIN_USERNAME = adminUsername;
+        process.env.ADMIN_PASSWORD = adminPassword;
+        
+        res.json({ success: true, message: 'Pengaturan server berhasil disimpan' });
+    } catch (error) {
+        console.error('Error saving server settings:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Gagal menyimpan pengaturan server: ' + error.message 
+        });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server berjalan di port ${PORT}`);

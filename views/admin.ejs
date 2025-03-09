@@ -352,6 +352,7 @@
                 <i class="fas fa-sync-alt me-2"></i>Refresh All Devices
             </button>
         </div>
+
         <!-- Statistics Summary -->
         <div class="row mb-4">
             <div class="col-md-3">
@@ -751,17 +752,18 @@
         // Toggle Password Visibility
         document.querySelectorAll('.toggle-password').forEach(button => {
             button.addEventListener('click', function() {
-                const passwordInput = this.closest('.input-group').querySelector('.wifi-password');
-                const eyeIcon = this.querySelector('i');
+                const passwordInput = this.previousElementSibling;
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
                 
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
+                // Ganti icon
+                const icon = this.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
                 } else {
-                    passwordInput.type = 'password';
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
                 }
             });
         });
@@ -941,6 +943,25 @@
             if (rxPowerFilter) {
                 rxPowerFilter.addEventListener('change', filterDevices);
             }
+        });
+
+        // Inisialisasi toggle password untuk semua input password
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function() {
+                const passwordInput = this.previousElementSibling;
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Ganti icon
+                const icon = this.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
         });
     </script>
 </body>
