@@ -892,25 +892,49 @@
         }
 
         function showToast(type, message) {
+            // Hapus toast lama jika ada
+            const existingToasts = document.querySelectorAll('.toast-notification');
+            existingToasts.forEach(toast => toast.remove());
+            
+            // Buat toast baru
             const toast = document.createElement('div');
-            toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
+            toast.className = `alert alert-${type} position-fixed toast-notification`;
+            
+            // Style untuk toast yang lebih kecil
             toast.style.zIndex = '1050';
+            toast.style.top = '10px';
+            toast.style.right = '10px';
+            toast.style.maxWidth = '300px';
+            toast.style.padding = '8px 12px';
+            toast.style.fontSize = '0.9rem';
+            toast.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            toast.style.borderLeft = type === 'success' ? '3px solid #28a745' : 
+                                     type === 'info' ? '3px solid #17a2b8' : 
+                                     type === 'warning' ? '3px solid #ffc107' : '3px solid #dc3545';
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s ease-in-out';
+            
             toast.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                  type === 'info' ? 'info-circle' : 
+                                  type === 'warning' ? 'exclamation-triangle' : 'exclamation-circle'} me-2"></i>
                 ${message}
             `;
+            
             document.body.appendChild(toast);
 
+            // Fade in
             setTimeout(() => {
-                toast.classList.add('show');
+                toast.style.opacity = '1';
             }, 100);
 
+            // Fade out lebih cepat (setelah 2.5 detik)
             setTimeout(() => {
-                toast.classList.remove('show');
+                toast.style.opacity = '0';
                 setTimeout(() => {
                     toast.remove();
-                }, 500);
-            }, 3000);
+                }, 300);
+            }, 2500);
         }
 
         // Fungsi untuk mengambil data perangkat terhubung dari API
@@ -920,7 +944,6 @@
             const loadingEl = document.getElementById('connected-devices-loading');
             const emptyEl = document.getElementById('connected-devices-empty');
             const errorEl = document.getElementById('connected-devices-error');
-            const errorMessage = document.getElementById('error-message');
             const tableBody = document.getElementById('connected-devices-body');
             
             // Tampilkan loading
@@ -931,14 +954,18 @@
             
             try {
                 console.log('Fetching data from API...');
-                const response = await fetch('/api/connected-devices');
+                const deviceId = '<%= deviceData._id %>';
+                // Tambahkan deviceId ke request untuk memastikan data diambil untuk perangkat yang benar
+                const response = await fetch(`/api/connected-devices?deviceId=${deviceId}`);
                 
-                if (!response.ok) {
-                    throw new Error(`API returned status ${response.status}`);
+                let data;
+                try {
+                    data = await response.json();
+                    console.log('Data perangkat terhubung:', data);
+                } catch (parseError) {
+                    console.error('Error parsing response:', parseError);
+                    throw new Error('Format data tidak valid');
                 }
-                
-                const data = await response.json();
-                console.log('Data perangkat terhubung:', data);
                 
                 if (data.success && data.connectedUsers && data.connectedUsers.length > 0) {
                     // Render tabel
@@ -952,12 +979,12 @@
                             : '<span class="badge bg-secondary">Tidak Aktif</span>';
                         
                         row.innerHTML = `
-                            <td>${device.hostName}</td>
-                            <td>${device.ipAddress}</td>
-                            <td>${device.macAddress}</td>
-                            <td>${device.interfaceType}</td>
+                            <td>${device.hostName || '-'}</td>
+                            <td>${device.ipAddress || '-'}</td>
+                            <td>${device.macAddress || '-'}</td>
+                            <td>${device.interfaceType || '-'}</td>
                             <td>${statusBadge}</td>
-                            <td>${device.lastConnect}</td>
+                            <td>${device.lastConnect || '-'}</td>
                         `;
                         
                         tableBody.appendChild(row);
@@ -966,17 +993,46 @@
                     // Tampilkan tabel
                     tableEl.style.display = 'block';
                     loadingEl.style.display = 'none';
+                    
+                    // Jika ini data fallback, tampilkan toast notification yang akan otomatis hilang
+                    if (data.isFallbackData) {
+                        // Gunakan fungsi showToast yang sudah ada untuk konsistensi UI
+                        showToast('info', 'Menampilkan data contoh. Untuk data sebenarnya, silakan refresh perangkat.');
+                    }
+                    
                     console.log('Table displayed');
                 } else {
-                    // Tampilkan pesan kosong
+                    // Tampilkan pesan kosong dengan saran untuk refresh - versi lebih ringkas
+                    emptyEl.innerHTML = `
+                        <div class="d-flex flex-column align-items-center py-3">
+                            <i class="fas fa-info-circle mb-2" style="font-size: 1.5rem; color: #6c757d;"></i>
+                            <p class="mb-2">Tidak ada perangkat pengguna yang terhubung saat ini.</p>
+                            <button class="btn btn-sm btn-primary" onclick="refreshDevice()">
+                                <i class="fas fa-sync-alt me-1"></i> Refresh Data
+                            </button>
+                        </div>
+                    `;
                     emptyEl.style.display = 'block';
                     loadingEl.style.display = 'none';
                     console.log('No devices found');
                 }
             } catch (error) {
                 console.error('Error loading connected devices:', error);
-                errorMessage.textContent = 'Gagal memuat data perangkat: ' + (error.message || 'Silakan coba lagi nanti');
-                errorEl.style.display = 'block';
+                
+                // Tampilkan toast notification dan pesan singkat
+                showToast('info', 'Data perangkat belum tersedia. Silakan refresh untuk mencoba kembali.');
+                
+                // Tampilkan pesan info yang lebih sederhana
+                emptyEl.innerHTML = `
+                    <div class="d-flex flex-column align-items-center py-3">
+                        <i class="fas fa-info-circle mb-2" style="font-size: 1.5rem; color: #6c757d;"></i>
+                        <p class="mb-2">Tidak ada data perangkat yang tersedia saat ini.</p>
+                        <button class="btn btn-sm btn-primary" onclick="refreshDevice()">
+                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                        </button>
+                    </div>
+                `;
+                emptyEl.style.display = 'block';
                 loadingEl.style.display = 'none';
             }
         }
@@ -986,9 +1042,18 @@
             this.disabled = true;
             this.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i>';
             
-            loadConnectedDevices().finally(() => {
+            // Hubungkan dengan fungsi refreshDevice untuk memastikan pembaruan data server
+            refreshDevice().then(() => {
+                setTimeout(() => {
+                    loadConnectedDevices().finally(() => {
+                        this.disabled = false;
+                        this.innerHTML = '<i class="fas fa-sync-alt"></i>';
+                    });
+                }, 5000); // Tunggu 5 detik setelah refresh device
+            }).catch(() => {
                 this.disabled = false;
                 this.innerHTML = '<i class="fas fa-sync-alt"></i>';
+                loadConnectedDevices();
             });
         });
     </script>
