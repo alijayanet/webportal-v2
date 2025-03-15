@@ -1,12 +1,12 @@
 {
-  "otpEnabled": false,
+  "otpEnabled": true,
   "otpExpiry": 300,
   "otpLength": 4,
   "whatsappGateway": "fonnte",
-  "adminWhatsapp": "",
+  "adminWhatsapp": "6281947215703",
   "gateways": {
     "fonnte": {
-      "token": "",
+      "token": "wik2cbw4NaURsKqycqL6",
       "enabled": true
     },
     "wablas": {
@@ -16,7 +16,7 @@
     },
     "mpwa": {
       "token": "",
-      "serverUrl": "",
+      "serverUrl": "https://mpwa.id/api",
       "sender": "",
       "enabled": false
     }
