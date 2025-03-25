@@ -235,6 +235,8 @@ async function sendViaMpwa(phoneNumber, message) {
         const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE));
         const token = settings.gateways.mpwa.token;
         const sender = settings.gateways.mpwa.sender || 'default';
+        const endpoint = settings.gateways.mpwa.serverUrl || 'https://wa.parabolaku.id/send-message';
+        const footer = settings.gateways.mpwa.footer || 'ALIJAYA-NET';
         
         if (!token) {
             console.error('MPWA token tidak dikonfigurasi');
@@ -243,7 +245,8 @@ async function sendViaMpwa(phoneNumber, message) {
         
         console.log('Mengirim MPWA ke:', {
             nomor: phoneNumber,
-            sender: sender
+            sender: sender,
+            endpoint: endpoint
         });
 
         // Format nomor dengan benar (format 62xxx)
@@ -259,16 +262,13 @@ async function sendViaMpwa(phoneNumber, message) {
         console.log('Format nomor MPWA:', targetNumber);
         
         try {
-            // URL endpoint yang tetap
-            const endpoint = 'https://wa.parabolaku.id/send-message';
-            
-            // Gunakan format JSON sesuai contoh yang diberikan
+            // Gunakan endpoint dari pengaturan
             const requestBody = {
                 api_key: token,
                 sender: sender,
                 number: targetNumber,
                 message: message,
-                footer: "ALIJAYA-NET"
+                footer: footer
             };
             
             console.log('MPWA JSON data:', JSON.stringify(requestBody));
