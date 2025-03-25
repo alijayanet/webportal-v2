@@ -195,11 +195,20 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="mpwa-server" class="form-label">Server URL</label>
-                                    <input type="text" class="form-control" id="mpwa-server" value="<%= settings.gateways?.mpwa?.serverUrl || 'https://mpwa.id/api' %>">
+                                    <input type="text" class="form-control" id="mpwa-server" 
+                                           value="<%= settings.gateways?.mpwa?.serverUrl || 'https://wa.parabolaku.id/send-message' %>"
+                                           placeholder="https://wa.parabolaku.id/send-message">
+                                    <div class="form-text">URL endpoint untuk mengirim pesan WhatsApp</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="mpwa-sender" class="form-label">Sender</label>
                                     <input type="text" class="form-control" id="mpwa-sender" value="<%= settings.gateways?.mpwa?.sender || '' %>">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="mpwa-footer" class="form-label">Footer Pesan</label>
+                                    <input type="text" class="form-control" id="mpwa-footer" 
+                                           value="<%= settings.gateways?.mpwa?.footer || 'ALIJAYA-NET' %>"
+                                           placeholder="ALIJAYA-NET">
                                 </div>
                             </div>
                             
@@ -353,6 +362,7 @@
                         token: $('#mpwa-token').val(),
                         serverUrl: $('#mpwa-server').val(),
                         sender: $('#mpwa-sender').val(),
+                        footer: $('#mpwa-footer').val(),
                         enabled: whatsappGateway === 'mpwa'
                     }
                 };
