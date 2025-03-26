@@ -42,13 +42,46 @@
         }
         
         .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 5px 20px rgba(0, 0, 0, 0.1),
+                0 0 15px rgba(107, 115, 255, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.25rem;
         }
         .card {
-            transition: transform 0.2s;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.15),
+                0 0 20px rgba(107, 115, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
         }
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-15px);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(107, 115, 255, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        .card-header h5 {
+            color: #333;
+            font-weight: 600;
+            margin: 0;
         }
         .status-icon {
             width: 80px;
@@ -57,68 +90,74 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto;
-            color: white;
+            margin: 0 auto 20px;
             font-size: 2rem;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(107, 115, 255, 0.3),
+                inset 0 0 15px rgba(255, 255, 255, 0.5);
         }
-        .btn-refresh {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
+        .btn {
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 500;
             transition: all 0.3s ease;
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.15),
+                0 0 15px rgba(107, 115, 255, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
         }
-        .btn-refresh:hover {
-            transform: rotate(180deg);
-            color: white;
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(107, 115, 255, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            border: none;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5253 100%);
+            border: none;
         }
         .info-group {
-            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.05),
+                0 0 10px rgba(107, 115, 255, 0.05),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
         }
-        .info-group label {
-            display: block;
-            color: #6c757d;
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
+        .info-group:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.1),
+                0 0 20px rgba(107, 115, 255, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
         }
-        .info-group .value {
-            font-weight: 500;
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.2),
+                0 0 25px rgba(107, 115, 255, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
         }
-        .stat-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-        .stat-item:last-child {
-            border-bottom: none;
-        }
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .table thead th {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
             color: white;
-            margin-right: 1rem;
-        }
-        .stat-info label {
-            display: block;
-            color: #6c757d;
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
-        }
-        .stat-info .value {
             font-weight: 500;
+            border: none;
         }
         .form-control:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
         }
         .btn-primary:hover {
             background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
@@ -180,16 +219,17 @@
         
         .dark-mode .card {
             background-color: rgba(20, 20, 30, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(107, 115, 255, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
         }
         
         .dark-mode .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 30px 70px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(107, 115, 255, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
         
         .dark-mode .card-header {
@@ -307,12 +347,24 @@
         }
         
         .dark-mode .stat-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
             transition: all 0.3s ease;
+            border: 1px solid rgba(107, 115, 255, 0.1);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                0 0 20px rgba(107, 115, 255, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
         }
         
         .dark-mode .stat-item:hover {
-            background-color: rgba(255, 255, 255, 0.03);
+            transform: translateY(-10px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                0 0 30px rgba(107, 115, 255, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
         }
         
         .dark-mode .stat-icon {
@@ -425,6 +477,22 @@
         /* Glow Effect untuk Status Icons */
         .dark-mode .status-icon {
             box-shadow: 0 0 20px rgba(123, 104, 238, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                margin-bottom: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
