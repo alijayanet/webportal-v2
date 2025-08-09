@@ -192,11 +192,17 @@
             background-color: #d4edda;
             color: #155724;
             border-left: 4px solid #28a745;
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
             border-left: 4px solid #dc3545;
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         /* Dark Mode Styles */
@@ -379,11 +385,24 @@
             backdrop-filter: blur(5px);
         }
         
+        .dark-mode .alert-success {
+            background-color: rgba(34, 197, 94, 0.2);
+            border-left: 4px solid #22c55e;
+            color: #86efac;
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
         .dark-mode .alert-danger {
             background-color: rgba(153, 27, 27, 0.3);
             border-left: 4px solid #ef4444;
             color: #fca5a5;
             backdrop-filter: blur(5px);
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
         .dark-mode .modal-content {
@@ -519,7 +538,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body text-center">
-                        <div class="status-icon mb-3" style="background-color: <%= deviceData.statusColor %>">
+                        <div class="status-icon mb-3" style="background-color: <%- deviceData.statusColor %>">
                             <i class="fas fa-signal"></i>
                         </div>
                         <h5 class="card-title mb-1"><%= deviceData.statusLabel %></h5>
@@ -643,78 +662,49 @@
                         <h5 class="mb-0"><i class="fas fa-wifi me-2"></i>WiFi Settings</h5>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <h6 class="text-primary"><i class="fas fa-wifi me-2"></i>WiFi 2.4G</h6>
-                            <!-- Form Update SSID 2.4G -->
-                            <div class="mt-3">
-                                <form class="update-ssid-2g-form" data-device-id="<%= deviceData._id %>">
-                                    <label class="form-label">SSID 2.4G</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ssid2G" class="form-control" 
-                                               placeholder="SSID 2.4G" 
-                                               value="<%= deviceData.ssid || deviceData.ssid2G || 'N/A' %>" 
-                                               required>
-                                        <button type="submit" class="btn btn-primary" title="Update SSID 2.4G">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <!-- Form Update Password 2.4G -->
-                            <div class="mt-3">
-                                <form class="update-password-2g-form" data-device-id="<%= deviceData._id %>">
-                                    <label class="form-label">Password 2.4G</label>
-                                    <div class="input-group">
-                                        <input type="password" name="password2G" class="form-control wifi-password-2g" 
-                                               placeholder="New Password 2.4G" minlength="8" required>
-                                        <button type="button" class="btn btn-outline-secondary toggle-password-2g" title="Show/Hide Password">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button type="submit" class="btn btn-primary" title="Update Password 2.4G">
-                                            <i class="fas fa-key"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                        <!-- Form Update SSID -->
+                        <div class="mb-4">
+                            <h6 class="text-primary"><i class="fas fa-wifi me-2"></i>Update SSID WiFi</h6>
+                            <form class="update-ssid-form" data-device-id="<%= deviceData._id %>">
+                                <div class="mb-3">
+                                    <label class="form-label">SSID WiFi</label>
+                                    <input type="text" name="ssid" class="form-control" 
+                                           placeholder="Masukkan SSID WiFi baru" 
+                                           value="<%= deviceData.ssid || deviceData.ssid2G || '' %>" 
+                                           required>
+                                    <small class="text-muted">SSID akan diterapkan untuk kedua band 2.4G dan 5G (5G akan otomatis ditambah suffix -5G)</small>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Update SSID
+                                    </button>
+                                </div>
+                            </form>
                         </div>
 
                         <hr class="my-3">
 
+                        <!-- Form Update Password -->
                         <div class="mb-3">
-                            <h6 class="text-primary"><i class="fas fa-wifi me-2"></i>WiFi 5G</h6>
-                            <!-- Form Update SSID 5G -->
-                            <div class="mt-3">
-                                <form class="update-ssid-5g-form" data-device-id="<%= deviceData._id %>">
-                                    <label class="form-label">SSID 5G</label>
+                            <h6 class="text-primary"><i class="fas fa-key me-2"></i>Update Password WiFi</h6>
+                            <form class="update-password-form" data-device-id="<%= deviceData._id %>">
+                                <div class="mb-3">
+                                    <label class="form-label">Password WiFi</label>
                                     <div class="input-group">
-                                        <input type="text" name="ssid5G" class="form-control" 
-                                               placeholder="SSID 5G" 
-                                               value="<%= deviceData.ssid5G || (deviceData.ssid ? deviceData.ssid + '-5G' : 'N/A') %>" 
-                                               required>
-                                        <button type="submit" class="btn btn-primary" title="Update SSID 5G">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <!-- Form Update Password 5G -->
-                            <div class="mt-3">
-                                <form class="update-password-5g-form" data-device-id="<%= deviceData._id %>">
-                                    <label class="form-label">Password 5G</label>
-                                    <div class="input-group">
-                                        <input type="password" name="password5G" class="form-control wifi-password-5g" 
-                                               placeholder="New Password 5G" minlength="8" required>
-                                        <button type="button" class="btn btn-outline-secondary toggle-password-5g" title="Show/Hide Password">
+                                        <input type="password" name="password" class="form-control wifi-password" 
+                                               placeholder="Masukkan password WiFi baru" minlength="8" required>
+                                        <button type="button" class="btn btn-outline-secondary toggle-password" title="Show/Hide Password">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button type="submit" class="btn btn-primary" title="Update Password 5G">
-                                            <i class="fas fa-key"></i>
-                                        </button>
                                     </div>
-                                </form>
-                            </div>
+                                    <small class="text-muted">Password akan diterapkan untuk kedua band 2.4G dan 5G</small>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-key me-2"></i>Update Password
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -821,9 +811,9 @@
             loadConnectedDevices();
         });
         
-        // Toggle Password Visibility untuk 2.4G
-        document.querySelector('.toggle-password-2g').addEventListener('click', function() {
-            const passwordInput = this.closest('.input-group').querySelector('.wifi-password-2g');
+        // Toggle Password Visibility
+        document.querySelector('.toggle-password').addEventListener('click', function() {
+            const passwordInput = this.closest('.input-group').querySelector('.wifi-password');
             const eyeIcon = this.querySelector('i');
             
             if (passwordInput.type === 'password') {
@@ -837,36 +827,23 @@
             }
         });
 
-        // Toggle Password Visibility untuk 5G
-        document.querySelector('.toggle-password-5g').addEventListener('click', function() {
-            const passwordInput = this.closest('.input-group').querySelector('.wifi-password-5g');
-            const eyeIcon = this.querySelector('i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        });
-
-        // Update SSID 2.4G Form Handler
-        document.querySelector('.update-ssid-2g-form').addEventListener('submit', async function(e) {
+        // Update SSID Form Handler
+        document.querySelector('.update-ssid-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const deviceId = this.dataset.deviceId;
-            const ssidInput = this.querySelector('input[name="ssid2G"]');
+            const ssidInput = this.querySelector('input[name="ssid"]');
             const submitButton = this.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.innerHTML;
             
             try {
                 submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
                 
-                // Kirim request update
+                // Generate SSID untuk 2.4G dan 5G berdasarkan input tunggal
+                const baseSSID = ssidInput.value.trim();
+                
+                // Kirim request update dengan SSID yang sama untuk 2.4G dan 5G dengan suffix
                 const response = await fetch('/update-wifi', {
                     method: 'POST',
                     headers: {
@@ -874,174 +851,50 @@
                     },
                     body: JSON.stringify({
                         deviceId: deviceId,
-                        ssid2G: ssidInput.value
+                        ssid2G: baseSSID,
+                        ssid5G: baseSSID + '-5G'
                     })
                 });
 
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Tampilkan toast notification
-                    const toast = document.createElement('div');
-                    toast.className = 'alert alert-success position-fixed top-0 end-0 m-3';
-                    toast.style.zIndex = '1050';
-                    toast.innerHTML = `
-                        <i class="fas fa-check-circle me-2"></i>
-                        SSID 2.4G berhasil diupdate
-                    `;
-                    document.body.appendChild(toast);
-                    
-                    // Hapus toast setelah 3 detik
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 3000);
-                    
-                    // Reload halaman
+                    showAlert('success', 'SSID WiFi berhasil diupdate');
                     setTimeout(() => {
                         window.location.reload();
-                    }, 1000);
+                    }, 2000);
                 } else {
-                    throw new Error(data.message || 'Gagal mengupdate SSID 2.4G');
+                    throw new Error(data.message || 'Gagal mengupdate SSID WiFi');
                 }
             } catch (error) {
-                console.error('Update SSID 2.4G error:', error);
-                alert('Terjadi kesalahan saat mengupdate SSID 2.4G: ' + error.message);
-            } finally {
-                // Kembalikan button ke kondisi awal
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
-                }
-            }
-        });
-
-        // Update SSID 5G Form Handler
-        document.querySelector('.update-ssid-5g-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const deviceId = this.dataset.deviceId;
-            const ssidInput = this.querySelector('input[name="ssid5G"]');
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.innerHTML;
-            
-            try {
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
-                
-                // Kirim request update
-                const response = await fetch('/update-wifi', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        deviceId: deviceId,
-                        ssid5G: ssidInput.value
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Tampilkan toast notification
-                    const toast = document.createElement('div');
-                    toast.className = 'alert alert-success position-fixed top-0 end-0 m-3';
-                    toast.style.zIndex = '1050';
-                    toast.innerHTML = `
-                        <i class="fas fa-check-circle me-2"></i>
-                        SSID 5G berhasil diupdate
-                    `;
-                    document.body.appendChild(toast);
-                    
-                    // Hapus toast setelah 3 detik
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 3000);
-                    
-                    // Reload halaman
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else {
-                    throw new Error(data.message || 'Gagal mengupdate SSID 5G');
-                }
-            } catch (error) {
-                console.error('Update SSID 5G error:', error);
-                alert('Terjadi kesalahan saat mengupdate SSID 5G: ' + error.message);
-            } finally {
-                // Kembalikan button ke kondisi awal
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
-                }
-            }
-        });
-
-        // Update Password 2.4G Form Handler
-        document.querySelector('.update-password-2g-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const deviceId = this.dataset.deviceId;
-            const passwordInput = this.querySelector('input[name="password2G"]');
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.innerHTML;
-            
-            try {
-                if (passwordInput.value.length < 8) {
-                    showAlert('danger', 'Password harus minimal 8 karakter');
-                    return;
-                }
-                
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
-                
-                const response = await fetch('/update-wifi', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        deviceId: deviceId,
-                        password2G: passwordInput.value
-                    })
-                });
-
-                const data = await response.json();
-                showAlert(data.success ? 'success' : 'danger', data.message || (data.success ? 'Password 2.4G berhasil diupdate' : 'Gagal mengupdate password 2.4G'));
-                
-                if (data.success) {
-                    passwordInput.value = '';
-                    setTimeout(() => location.reload(), 2000);
-                } else {
-                    throw new Error(data.message || 'Gagal mengupdate password 2.4G');
-                }
-            } catch (error) {
-                console.error('Update password 2.4G error:', error);
-                showAlert('danger', 'Gagal mengupdate password 2.4G: ' + (error.message || 'Unknown error'));
+                console.error('Update SSID error:', error);
+                showAlert('danger', 'Terjadi kesalahan saat mengupdate SSID WiFi: ' + error.message);
             } finally {
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalButtonText;
             }
         });
 
-        // Update Password 5G Form Handler
-        document.querySelector('.update-password-5g-form').addEventListener('submit', async function(e) {
+        // Update Password Form Handler
+        document.querySelector('.update-password-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const deviceId = this.dataset.deviceId;
-            const passwordInput = this.querySelector('input[name="password5G"]');
+            const passwordInput = this.querySelector('input[name="password"]');
             const submitButton = this.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.innerHTML;
             
             try {
+                // Validasi password
                 if (passwordInput.value.length < 8) {
                     showAlert('danger', 'Password harus minimal 8 karakter');
                     return;
                 }
                 
                 submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
                 
+                // Kirim request update dengan password yang sama untuk 2.4G dan 5G
                 const response = await fetch('/update-wifi', {
                     method: 'POST',
                     headers: {
@@ -1049,22 +902,25 @@
                     },
                     body: JSON.stringify({
                         deviceId: deviceId,
+                        password2G: passwordInput.value,
                         password5G: passwordInput.value
                     })
                 });
 
                 const data = await response.json();
-                showAlert(data.success ? 'success' : 'danger', data.message || (data.success ? 'Password 5G berhasil diupdate' : 'Gagal mengupdate password 5G'));
                 
                 if (data.success) {
+                    showAlert('success', 'Password WiFi berhasil diupdate');
                     passwordInput.value = '';
-                    setTimeout(() => location.reload(), 2000);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } else {
-                    throw new Error(data.message || 'Gagal mengupdate password 5G');
+                    throw new Error(data.message || 'Gagal mengupdate password WiFi');
                 }
             } catch (error) {
-                console.error('Update password 5G error:', error);
-                showAlert('danger', 'Gagal mengupdate password 5G: ' + (error.message || 'Unknown error'));
+                console.error('Update password error:', error);
+                showAlert('danger', 'Terjadi kesalahan saat mengupdate password WiFi: ' + error.message);
             } finally {
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalButtonText;
@@ -1133,7 +989,7 @@
                 }
             } catch (error) {
                 console.error('Refresh error:', error);
-                alert('Terjadi kesalahan saat me-refresh data: ' + error.message);
+                showAlert('danger', 'Terjadi kesalahan saat me-refresh data: ' + error.message);
             } finally {
                 // Kembalikan button ke kondisi awal
                 if (refreshButton) {
@@ -1246,14 +1102,26 @@
             const alertContainer = document.createElement('div');
             alertContainer.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
             alertContainer.style.zIndex = '1050';
-            alertContainer.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
-                ${message}
-            `;
+            alertContainer.style.display = 'block';
+            alertContainer.style.opacity = '0';
+            alertContainer.style.transition = 'opacity 0.3s ease-in-out';
+            alertContainer.innerHTML = message;
+            
             document.body.appendChild(alertContainer);
             
+            // Trigger animation
             setTimeout(() => {
-                alertContainer.remove();
+                alertContainer.style.opacity = '1';
+            }, 10);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alertContainer.style.opacity = '0';
+                setTimeout(() => {
+                    if (alertContainer.parentNode) {
+                        alertContainer.remove();
+                    }
+                }, 300);
             }, 5000);
         }
 
@@ -1261,21 +1129,26 @@
             const toast = document.createElement('div');
             toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
             toast.style.zIndex = '1050';
-            toast.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
-                ${message}
-            `;
+            toast.style.display = 'block';
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s ease-in-out';
+            toast.innerHTML = message;
+            
             document.body.appendChild(toast);
 
+            // Trigger animation
             setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
+                toast.style.opacity = '1';
+            }, 10);
 
+            // Auto remove after 3 seconds
             setTimeout(() => {
-                toast.classList.remove('show');
+                toast.style.opacity = '0';
                 setTimeout(() => {
-                    toast.remove();
-                }, 500);
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
+                }, 300);
             }, 3000);
         }
 
